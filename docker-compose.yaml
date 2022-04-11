@@ -1,8 +1,9 @@
 services:
   app:
-    build: .
+    #build: .
     image: tojurnru/poe-youtube-post-to-discord:latest
     command: yarn start
     env_file: .env
     volumes:
-      - state.json:/app/state.json
+      - /local-path-to-repo/youtubers.txt:/app/youtubers.txt
+      - /local-path-to-repo/state.json:/app/state.json
