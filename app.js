@@ -10,8 +10,9 @@ const {
 const run = async () => {
 
   const currentTimestamp = Date.now();
-  const { timestamp: lastTimestamp, youtubers } = await state.getState();
-  console.log(`last timestamp: ${lastTimestamp}`)
+  const { timestamp, youtubers } = await state.getState();
+  const lastTimestamp = new Date(timestamp);
+  console.log(`last timestamp: ${lastTimestamp}`);
 
   const newVideos = [];
 
