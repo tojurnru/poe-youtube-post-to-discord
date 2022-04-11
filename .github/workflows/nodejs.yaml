@@ -18,14 +18,12 @@ jobs:
       - name: Prepare node and yarn
         uses: volta-cli/action@v1
 
-      - name: Install packages, test, and build
+      - name: Install packages
         run: |
           pwd
           node --version
           yarn --version
           yarn
-          yarn lint
-          yarn build
         env:
           CI: true
 
