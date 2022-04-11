@@ -8,6 +8,7 @@ readme/
 .env.example
 .gitignore
 Dockerfile
+docker-compose.yaml
 LICENSE
 
 *.log

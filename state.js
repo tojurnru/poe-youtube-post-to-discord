@@ -28,7 +28,7 @@ exports.getState = async () => {
 
   const youtubersPath = path.resolve(__dirname + '/youtubers.txt');
   const youtubersList = fs.readFileSync(youtubersPath);
-  const youtubers = youtubersList.toString().split('\n');
+  const youtubers = youtubersList.toString().trim().split('\n');
 
   try {
     const currentState = require('./state.json');
