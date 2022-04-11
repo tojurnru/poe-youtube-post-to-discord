@@ -1,0 +1,16 @@
+.git/
+.github/
+local/
+node_modules/
+readme/
+
+.env
+.env.example
+.gitignore
+Dockerfile
+LICENSE
+
+*.log
+*.md
+
+state.json
