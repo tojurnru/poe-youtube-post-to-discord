@@ -5,7 +5,8 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "start": "node -r dotenv/config app.js"
+    "start": "node app.js",
+    "dev": "node -r dotenv/config app.js"
   },
   "dependencies": {
     "axios": "^0.26.1",
