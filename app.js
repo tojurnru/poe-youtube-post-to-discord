@@ -33,7 +33,6 @@ const run = async () => {
       const title = item.snippet.title;
       const videoId = item.snippet.resourceId.videoId;
 
-      console.log(date, lastTimestamp);
       if (date < lastTimestamp) continue;
 
       console.log(`  ${channelTitle} new video: ${title}`);
