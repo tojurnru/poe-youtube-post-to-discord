@@ -1,0 +1,17 @@
+{
+  "name": "poe-youtube-post-to-discord",
+  "author": "tojurnru",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node -r dotenv/config app.js"
+  },
+  "dependencies": {
+    "axios": "^0.26.1",
+    "googleapis": "^100.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0"
+  }
+}

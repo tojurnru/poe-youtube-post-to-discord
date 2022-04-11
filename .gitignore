@@ -1,0 +1,10 @@
+node_modules/
+
+# for my local stuff
+local/
+
+# environment variables
+.env
+
+# we don't use db but file storage for simplicity
+state.json
