@@ -20,7 +20,7 @@ const run = async () => {
   for (const youtuber of youtubers) {
     console.log(`scanning ${youtuber.username}...`);
 
-    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.uploadPlaylistId}&key=${GOOGLE_API_KEY}&maxResults=10`;
+    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.uploadPlaylistId}&key=${GOOGLE_API_KEY}&maxResults=1`;
     const response = await axios.get(url);
 
     const { data = {} } = response;
@@ -28,12 +28,14 @@ const run = async () => {
 
     for (const item of items) {
       const date = new Date(item.snippet.publishedAt);
-      const channelTitle = item.snippet.channelTitle; // username?
+      const channelTitle = item.snippet.channelTitle; // youtuber name
       const title = item.snippet.title;
       const videoId = item.snippet.resourceId.videoId;
 
+      console.log(date, lastTimestamp);
       if (date < lastTimestamp) continue;
 
+      console.log(`  ${channelTitle} new video: ${title}`);
       newVideos.push({ date, channelTitle, title, videoId });
     }
 
