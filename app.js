@@ -47,7 +47,7 @@ const run = async () => {
 
     for (const video of newVideos) {
       const videoUrl = `https://www.youtube.com/watch?v=${video.videoId}`;
-      const message = `New Video from **${video.channelTitle}**: **${video.title}**\n${videoUrl}`
+      const message = `**${video.channelTitle}** posted a new video: **${video.title}**\n${videoUrl}`
 
       await axios.post(DISCORD_WEBHOOK_URL, { content: message });
       await delay(1000);
