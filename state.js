@@ -6,7 +6,7 @@ const { delay } = require('./util/delay');
 const { GOOGLE_API_KEY = '' } = process.env;
 
 exports.saveTimestamp = async (newTimestamp) => {
-  console.log(`save new timestamp: ${newTimestamp}`);
+  console.log(`save new timestamp: ${newTimestamp} | ${new Date(newTimestamp).toUTCString()}`);
 
   const state = require('./state.json');
   state.timestamp = newTimestamp;

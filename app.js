@@ -12,7 +12,7 @@ const run = async () => {
   const currentTimestamp = Date.now();
   const { timestamp, youtubers } = await state.getState();
   const lastTimestamp = new Date(timestamp);
-  console.log(`last timestamp: ${lastTimestamp}`);
+  console.log(`last timestamp: ${timestamp} | ${lastTimestamp.toUTCString()}`);
 
   const newVideos = [];
 
@@ -21,7 +21,7 @@ const run = async () => {
   for (const youtuber of youtubers) {
     console.log(`scanning ${youtuber.username}...`);
 
-    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.uploadPlaylistId}&key=${GOOGLE_API_KEY}&maxResults=1`;
+    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.uploadPlaylistId}&key=${GOOGLE_API_KEY}&maxResults=5`;
     const response = await axios.get(url);
 
     const { data = {} } = response;
@@ -30,10 +30,10 @@ const run = async () => {
     for (const item of items) {
       const date = new Date(item.snippet.publishedAt);
       const channelTitle = item.snippet.channelTitle; // youtuber name
-      const title = item.snippet.title;
+      const title = item.snippet.title || '';
       const videoId = item.snippet.resourceId.videoId;
 
-      console.log(`${date} | ${lastTimestamp} | ${title}`);
+      console.log(`${date.getTime()} | ${date.toUTCString()} | ${title.substr(0, 30)}`);
 
       if (date < lastTimestamp) continue;
 
