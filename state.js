@@ -5,45 +5,45 @@ const { delay } = require('./util/delay');
 
 const { GOOGLE_API_KEY = '' } = process.env;
 
-exports.saveTimestamp = async (newTimestamp) => {
-  console.log(`save new timestamp: ${newTimestamp} | ${new Date(newTimestamp).toUTCString()}`);
+let init = false;
+let state = {};
 
-  const state = require('./state.json');
-  state.timestamp = newTimestamp;
-
-  const stateStr = JSON.stringify(state, null, 2);
-  const statePath = path.resolve(__dirname + '/state.json');
-  fs.writeFileSync(statePath, Buffer.from(stateStr, 'utf8'));
-
-}
-
-exports.getState = async () => {
+const initialize = async () => {
+  if (init) return;
+  init = true;
 
   const youtubersData = [];
 
   const TIME_INTERVAL = 1 * 60 * 60 * 1000;
   let timestamp = Date.now() - TIME_INTERVAL; // set the default timestamp if there's no current timestamp in state.json
 
-  // 1. Get list of youtubers
+  // 1. Get list of youtubers.txt
 
   const youtubersPath = path.resolve(__dirname + '/youtubers.txt');
   const youtubersList = fs.readFileSync(youtubersPath);
-  const youtubers = youtubersList.toString().trim().split('\n');
+  const txtYoutubers = youtubersList.toString().trim().split('\n');
 
   try {
-    const currentState = require('./state.json');
-    timestamp == currentState.timestamp;
-    if (youtubers.length === currentState.youtubers.length) {
-      // return current state if state.json already populated (from youtubers.txt)
-      return currentState;
+    state = require('./state.json');
+    timestamp == state.timestamp;
+    if (txtYoutubers.length === state.youtubers.length) {
+      return; // complete init() if state.json already populated
     }
   } catch (err) {
     console.log("state.json doesn't exist/invalid/outdated, start populating...");
   }
 
   // 2. Loop youtubers
+  const stateYoutubers = state.youtubers || [];
 
-  for (const youtuber of youtubers) {
+  for (const youtuber of txtYoutubers) {
+
+    // use existing data if exist
+    const found = stateYoutubers.find((stateYoutuber) => stateYoutuber.username == youtuber);
+    if (found && found.uploadPlaylistId) {
+      youtubersData.push(found);
+      continue;
+    }
 
     let channelId = '';
     console.log(`processing ${youtuber}:`);
@@ -86,13 +86,27 @@ exports.getState = async () => {
     }
   }
 
-  // 3. Save & return state
+  // 3. Save state into file
 
-  const state = { timestamp, youtubers: youtubersData };
+  state = { timestamp, youtubers: youtubersData };
   const stateStr = JSON.stringify(state, null, 2);
   const statePath = path.resolve(__dirname + '/state.json');
   fs.writeFileSync(statePath, Buffer.from(stateStr, 'utf8'));
+}
 
+exports.saveTimestamp = async (newTimestamp) => {
+  await initialize();
+
+  console.log(`save new timestamp: ${newTimestamp} | ${new Date(newTimestamp).toLocaleString()}`);
+
+  state.timestamp = newTimestamp;
+
+  const stateStr = JSON.stringify(state, null, 2);
+  const statePath = path.resolve(__dirname + '/state.json');
+  fs.writeFileSync(statePath, Buffer.from(stateStr, 'utf8'));
+}
+
+exports.getState = async () => {
+  await initialize();
   return state;
-
 }

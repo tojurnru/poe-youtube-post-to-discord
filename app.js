@@ -12,7 +12,7 @@ const run = async () => {
   const currentTimestamp = Date.now();
   const { timestamp, youtubers } = await state.getState();
   const lastTimestamp = new Date(timestamp);
-  console.log(`last timestamp: ${timestamp} | ${lastTimestamp.toUTCString()}`);
+  console.log(`last timestamp: ${timestamp} | ${lastTimestamp.toLocaleString()}`);
 
   const newVideos = [];
 
@@ -33,7 +33,7 @@ const run = async () => {
       const title = item.snippet.title || '';
       const videoId = item.snippet.resourceId.videoId;
 
-      console.log(`${date.getTime()} | ${date.toUTCString()} | ${title.substr(0, 30)}`);
+      console.log(`${date.getTime()} | ${date.toLocaleString()} | ${title.substr(0, 40)}`);
 
       if (date < lastTimestamp) continue;
 
