@@ -50,7 +50,7 @@ const initialize = async () => {
 
     // 2a. Get ChannelId by Username
     {
-      const url = `https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&type=channel&q=${youtuber}&key=${GOOGLE_API_KEY}`;
+      const url = `https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&type=channel&q=${encodeURIComponent(youtuber)}&key=${GOOGLE_API_KEY}`;
       const response = await axios.get(url);
 
       console.log(JSON.stringify(response.data,null,2));
