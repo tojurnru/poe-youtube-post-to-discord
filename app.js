@@ -7,6 +7,15 @@ const {
   DISCORD_WEBHOOK_URL = ''
 } = process.env;
 
+const regex = /\bpoe\b|path.*of.*exile|discord\.tftrove\.com|discord\.gg\/tftrove/;
+
+const isPoeVideo = (snippet) => {
+  const { title = '', description = '' } = snippet;
+  if (regex.test(title.toLowerCase())) return true;
+  if (regex.test(description.toLowerCase())) return true;
+  return false;
+}
+
 const run = async () => {
 
   const currentTimestamp = Date.now();
@@ -36,6 +45,7 @@ const run = async () => {
       console.log(`${date.getTime()} | ${date.toLocaleString()} | ${title.substr(0, 40)}`);
 
       if (date < lastTimestamp) continue;
+      if (!isPoeVideo(item.snippet)) continue;
 
       console.log(`  ${channelTitle} new video: ${title}`);
       newVideos.push({ date, channelTitle, title, videoId });
