@@ -7,4 +7,4 @@ local/
 .env
 
 # we don't use db but file storage for simplicity
-state.json
+data/state.json

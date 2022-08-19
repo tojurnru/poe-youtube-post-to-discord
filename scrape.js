@@ -19,12 +19,12 @@ const initialize = async () => {
 
   // 1. Get list of youtubers.txt
 
-  const youtubersPath = path.resolve(__dirname + '/youtubers.txt');
+  const youtubersPath = path.resolve(__dirname + '/data/youtubers.txt');
   const youtubersList = fs.readFileSync(youtubersPath);
   const youtubersTxt = youtubersList.toString().trim().split('\n');
 
   try {
-    state = require('./state.json');
+    state = require('./data/state.json');
     if (state.timestamp) timestamp = state.timestamp;
   } catch (err) {
     console.log("state.json doesn't exist/invalid/outdated, start populating...");
@@ -79,7 +79,7 @@ const initialize = async () => {
 
   state = { timestamp, youtubers: youtubersData };
   const stateStr = JSON.stringify(state, null, 2);
-  const statePath = path.resolve(__dirname + '/state.json');
+  const statePath = path.resolve(__dirname + '/data/state.json');
   fs.writeFileSync(statePath, Buffer.from(stateStr, 'utf8'));
 }
 
@@ -91,7 +91,7 @@ exports.saveTimestamp = async (newTimestamp) => {
   state.timestamp = newTimestamp;
 
   const stateStr = JSON.stringify(state, null, 2);
-  const statePath = path.resolve(__dirname + '/state.json');
+  const statePath = path.resolve(__dirname + '/data/state.json');
   fs.writeFileSync(statePath, Buffer.from(stateStr, 'utf8'));
 }
 

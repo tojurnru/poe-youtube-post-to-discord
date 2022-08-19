@@ -14,4 +14,4 @@ LICENSE
 *.log
 *.md
 
-state.json
+data/state.json

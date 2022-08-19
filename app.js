@@ -28,7 +28,7 @@ const run = async () => {
   // 1. Scan youtube channels for new videos
 
   for (const youtuber of youtubers) {
-    console.log(`scanning ${youtuber.channelTitle}\n  ${youtuber.url}`);
+    console.log(`# scanning ${youtuber.channelTitle}\t\t${youtuber.url}`);
 
     const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.playlistId}&key=${GOOGLE_API_KEY}&maxResults=5`;
     const response = await axios.get(url);
@@ -47,7 +47,7 @@ const run = async () => {
       if (date < lastTimestamp) continue;
       if (!isPoeVideo(item.snippet)) continue;
 
-      console.log(`  ${channelTitle} new video: ${title}`);
+      console.log(`  -> ${channelTitle} new video: ${title}`);
       newVideos.push({ date, channelTitle, title, videoId });
     }
 

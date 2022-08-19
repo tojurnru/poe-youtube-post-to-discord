@@ -21,7 +21,7 @@ const initialize = async () => {
 
   // 1. Get list of youtubers.txt
 
-  const youtubersPath = path.resolve(__dirname + '/youtubers.txt');
+  const youtubersPath = path.resolve(__dirname + '/data/youtubers.txt');
   const youtubersList = fs.readFileSync(youtubersPath);
   const txtYoutubers = youtubersList.toString().trim().split('\n');
 

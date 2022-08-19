@@ -5,5 +5,4 @@ services:
     command: yarn start
     env_file: .env
     volumes:
-      - /local-path-to-repo/youtubers.txt:/app/youtubers.txt
-      - /local-path-to-repo/state.json:/app/state.json
+      - /your-local-path/poe-youtube-post-to-discord/data:/app/data
