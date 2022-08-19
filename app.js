@@ -1,5 +1,5 @@
 const axios = require('axios');
-const state = require('./state');
+const state = require('./scrape');
 const { delay } = require('./util/delay');
 
 const {
@@ -28,9 +28,9 @@ const run = async () => {
   // 1. Scan youtube channels for new videos
 
   for (const youtuber of youtubers) {
-    console.log(`scanning ${youtuber.username}...`);
+    console.log(`scanning ${youtuber.channelTitle}\n  ${youtuber.url}`);
 
-    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.uploadPlaylistId}&key=${GOOGLE_API_KEY}&maxResults=5`;
+    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.playlistId}&key=${GOOGLE_API_KEY}&maxResults=5`;
     const response = await axios.get(url);
 
     const { data = {} } = response;
