@@ -34,7 +34,7 @@ const initialize = async () => {
   
   // 2. Loop youtuber keywords
   for (const urlRaw of youtubersTxt) {
-    const url = urlRaw.trim();
+    const url = urlRaw.trim().split(/\s+/)[0]; // only get the first part, ignore any spacing onwards
     if (url.length === 0) continue;
 
     // use existing data if exist
