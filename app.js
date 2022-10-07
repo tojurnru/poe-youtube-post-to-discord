@@ -7,7 +7,7 @@ const {
   DISCORD_WEBHOOK_URL = ''
 } = process.env;
 
-const regex = /\bpoe\b|path.*of.*exile|discord\.tftrove\.com|discord\.gg\/tftrove/;
+const regex = /\bpoe\b|path.*of.*exile/;
 
 const isPoeVideo = (snippet) => {
   const { title = '', description = '' } = snippet;
