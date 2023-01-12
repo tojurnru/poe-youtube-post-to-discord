@@ -1,5 +1,5 @@
 // query id via API becomes obsolete. query from scraping youtube url instead (see scrape.js)
-
+/*
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
@@ -112,3 +112,4 @@ exports.getState = async () => {
   await initialize();
   return state;
 }
+*/

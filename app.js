@@ -27,7 +27,8 @@ const run = async () => {
 
   // 1. Scan youtube channels for new videos
 
-  for (const youtuber of youtubers) {
+  for (const i in youtubers) {
+    const youtuber = youtubers[i];
     console.log(`# scanning ${youtuber.channelTitle}\t\t${youtuber.url}`);
 
     const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.playlistId}&key=${GOOGLE_API_KEY}&maxResults=5`;
@@ -35,6 +36,7 @@ const run = async () => {
 
     const { data = {} } = response;
     const { items = [] } = data;
+    let check = true;
 
     for (const item of items) {
       const date = new Date(item.snippet.publishedAt);
@@ -46,6 +48,16 @@ const run = async () => {
 
       if (date < lastTimestamp) continue;
       if (!isPoeVideo(item.snippet)) continue;
+
+      if (check) {
+        check = false; // only need to check the first(latest) video
+        if (youtuber.latestVideoTitle === title) {
+          console.log('  -> video has been posted before, skip');
+          continue;
+        } else {
+          youtuber.latestVideoTitle = title;
+        }
+      }
 
       console.log(`  -> ${channelTitle} new video: ${title}`);
       newVideos.push({ date, channelTitle, title, videoId });
@@ -68,9 +80,9 @@ const run = async () => {
     }
   }
 
-  // 3. Save latest timestamp
+  // 3. Save latest timestamp & youtubers list (latestVideoTitle is updated here)
 
-  await state.saveTimestamp(currentTimestamp);
+  await state.save(currentTimestamp, youtubers);
 }
 
 run();

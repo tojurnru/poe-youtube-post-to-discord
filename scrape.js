@@ -83,6 +83,20 @@ const initialize = async () => {
   fs.writeFileSync(statePath, Buffer.from(stateStr, 'utf8'));
 }
 
+exports.save = async (newTimestamp, youtubers) => {
+  await initialize();
+
+  console.log(`save state. timestamp: ${newTimestamp} | ${new Date(newTimestamp).toLocaleString()}`);
+
+  state.timestamp = newTimestamp;
+  state.youtubers = youtubers;
+
+  const stateStr = JSON.stringify(state, null, 2);
+  const statePath = path.resolve(__dirname + '/data/state.json');
+  fs.writeFileSync(statePath, Buffer.from(stateStr, 'utf8'));
+}
+
+/*
 exports.saveTimestamp = async (newTimestamp) => {
   await initialize();
 
@@ -94,6 +108,7 @@ exports.saveTimestamp = async (newTimestamp) => {
   const statePath = path.resolve(__dirname + '/data/state.json');
   fs.writeFileSync(statePath, Buffer.from(stateStr, 'utf8'));
 }
+*/
 
 exports.getState = async () => {
   await initialize();
