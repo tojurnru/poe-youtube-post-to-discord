@@ -36,7 +36,6 @@ const run = async () => {
 
     const { data = {} } = response;
     const { items = [] } = data;
-    let check = true;
 
     for (const item of items) {
       const date = new Date(item.snippet.publishedAt);
@@ -44,24 +43,24 @@ const run = async () => {
       const title = item.snippet.title || '';
       const videoId = item.snippet.resourceId.videoId;
 
-      console.log(`${date.getTime()} | ${date.toLocaleString()} | ${title.substr(0, 40)}`);
+      console.log(`${date.getTime()} | ${date.toLocaleString()} | ${title.substr(0, 100)}`);
 
       if (date < lastTimestamp) continue;
       if (!isPoeVideo(item.snippet)) continue;
 
-      if (check) {
-        check = false; // only need to check the first(latest) video
-        if (youtuber.latestVideoTitle === title) {
-          console.log('  -> video has been posted before, skip');
-          continue;
-        } else {
-          youtuber.latestVideoTitle = title;
-        }
+      const latestVideoTitles = youtuber.latestVideoTitles || [];
+      if (latestVideoTitles.includes(title)) {
+        console.log('  -> video has been posted before, skip (checkall)');
+        continue;
       }
 
       console.log(`  -> ${channelTitle} new video: ${title}`);
       newVideos.push({ date, channelTitle, title, videoId });
     }
+
+    const latestVideoTitles = items.map(item => item.snippet.title || '');
+    youtuber.latestVideoTitles = latestVideoTitles;
+    delete youtuber.latestVideoTitle; // remove old field
 
     await delay(500);
   }
@@ -80,7 +79,7 @@ const run = async () => {
     }
   }
 
-  // 3. Save latest timestamp & youtubers list (latestVideoTitle is updated here)
+  // 3. Save latest timestamp & youtubers list (latestVideoTitles is updated here)
 
   await state.save(currentTimestamp, youtubers);
 }
