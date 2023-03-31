@@ -7,12 +7,18 @@ const {
   DISCORD_WEBHOOK_URL = ''
 } = process.env;
 
-const regex = /\bpoe\b|path.*of.*exile/;
+const regex = /\b(poe|path.*of.*exile)/i;
+const negativeRegex = /\b(diablo|torchlight|last.*epoch|wolcen|undecember|grim.*dawn)/i;
 
 const isPoeVideo = (snippet) => {
   const { title = '', description = '' } = snippet;
-  if (regex.test(title.toLowerCase())) return true;
-  if (regex.test(description.toLowerCase())) return true;
+
+  if (negativeRegex.test(title)) return false;
+  if (negativeRegex.test(description)) return false;
+
+  if (regex.test(title)) return true;
+  if (regex.test(description)) return true;
+
   return false;
 }
 
@@ -29,6 +35,8 @@ const run = async () => {
 
   for (const i in youtubers) {
     const youtuber = youtubers[i];
+    const latestVideoTitles = youtuber.latestVideoTitles || [];
+
     console.log(`# scanning ${youtuber.channelTitle}\t\t${youtuber.url}`);
 
     const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${youtuber.playlistId}&key=${GOOGLE_API_KEY}&maxResults=5`;
@@ -48,7 +56,6 @@ const run = async () => {
       if (date < lastTimestamp) continue;
       if (!isPoeVideo(item.snippet)) continue;
 
-      const latestVideoTitles = youtuber.latestVideoTitles || [];
       if (latestVideoTitles.includes(title)) {
         console.log('  -> video has been posted before, skip (checkall)');
         continue;
@@ -58,8 +65,7 @@ const run = async () => {
       newVideos.push({ date, channelTitle, title, videoId });
     }
 
-    const latestVideoTitles = items.map(item => item.snippet.title || '');
-    youtuber.latestVideoTitles = latestVideoTitles;
+    youtuber.latestVideoTitles = items.map(item => item.snippet.title);
     delete youtuber.latestVideoTitle; // remove old field
 
     await delay(500);
